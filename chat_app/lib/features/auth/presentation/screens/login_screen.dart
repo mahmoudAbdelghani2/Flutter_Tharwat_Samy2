@@ -1,3 +1,4 @@
+import 'package:chat_app/core/consts/app_consts.dart';
 import 'package:chat_app/core/widgets/custom_button_widget.dart';
 import 'package:chat_app/core/widgets/custom_text_fieldWidget.dart';
 import 'package:chat_app/features/auth/presentation/widgets/rich_text_widget.dart';
@@ -14,7 +15,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF2B475E),
+      backgroundColor: AppConsts.primaryBackgroundColor,
       body: Padding(
         padding: const EdgeInsets.all(12),
         child: Center(

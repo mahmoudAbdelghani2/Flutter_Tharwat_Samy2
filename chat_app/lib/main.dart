@@ -1,4 +1,4 @@
-import 'package:chat_app/features/auth/presentation/screens/login_screen.dart';
+import 'package:chat_app/core/router/app_router.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -10,6 +10,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: LoginScreen(), debugShowCheckedModeBanner: false);
+    return MaterialApp.router(
+      routerConfig: AppRouter.router,
+      debugShowCheckedModeBanner: false,
+    );
   }
 }
