@@ -3,6 +3,7 @@ import 'package:chat_app/core/widgets/custom_button_widget.dart';
 import 'package:chat_app/core/widgets/custom_text_fieldWidget.dart';
 import 'package:chat_app/features/auth/presentation/widgets/rich_text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -59,7 +60,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 CustomButtonWidget(onPressed: () {}, text: 'Login'),
                 const SizedBox(height: 12),
                 RichTextWidget(
-                  onTap: () {},
+                  onTap: () {
+                    GoRouter.of(context).pushReplacement(AppConsts.signupPath);
+                  },
                   mainText: 'Don\'t have an account?',
                   linkText: 'Register',
                 ),
