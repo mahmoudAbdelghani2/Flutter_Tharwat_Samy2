@@ -1,5 +1,6 @@
 import 'package:chat_app/core/widgets/custom_button_widget.dart';
 import 'package:chat_app/core/widgets/custom_text_fieldWidget.dart';
+import 'package:chat_app/features/auth/presentation/widgets/rich_text_widget.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -55,6 +56,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 CustomTextFieldWidget(hintText: 'Password'),
                 const SizedBox(height: 40),
                 CustomButtonWidget(onPressed: () {}, text: 'Login'),
+                const SizedBox(height: 12),
+                RichTextWidget(
+                  onTap: () {},
+                  mainText: 'Don\'t have an account?',
+                  linkText: 'Register',
+                ),
               ],
             ),
           ),
