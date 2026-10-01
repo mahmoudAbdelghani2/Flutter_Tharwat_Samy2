@@ -1,15 +1,27 @@
+import 'dart:developer';
+
 import 'package:chat_app/core/consts/app_consts.dart';
 import 'package:chat_app/core/widgets/custom_button_widget.dart';
 import 'package:chat_app/core/widgets/custom_text_field_widget.dart';
 import 'package:chat_app/features/auth/presentation/widgets/rich_text_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class SignUpScreen extends StatelessWidget {
+class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
 
   @override
+  State<SignUpScreen> createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<SignUpScreen> {
+  @override
   Widget build(BuildContext context) {
+    String email = '';
+    String password = '';
+    String firstName = '';
+    String lastName = '';
     return Scaffold(
       backgroundColor: AppConsts.primaryBackgroundColor,
       body: Padding(
@@ -52,11 +64,50 @@ class SignUpScreen extends StatelessWidget {
                 const SizedBox(height: 12),
                 CustomTextFieldWidget(hintText: 'Last Name'),
                 const SizedBox(height: 12),
-                CustomTextFieldWidget(hintText: 'Email'),
+                CustomTextFieldWidget(
+                  onChanged: (value) {
+                    email = value;
+                  },
+                  hintText: 'Email',
+                ),
                 const SizedBox(height: 12),
-                CustomTextFieldWidget(hintText: 'Password'),
+                CustomTextFieldWidget(
+                  onChanged: (value) {
+                    password = value;
+                  },
+                  hintText: 'Password',
+                ),
                 const SizedBox(height: 40),
-                CustomButtonWidget(onPressed: () {}, text: 'Sign Up'),
+                CustomButtonWidget(
+                  onPressed: () async {
+                    try {
+                      await registerNewUser(email, password);
+                      if (!context.mounted) return;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            'Your account has been created successfully!',
+                          ),
+                        ),
+                      );
+                      // ToDo: Navigate to the next screen
+                    } on FirebaseAuthException catch (e) {
+                      if (!context.mounted) return;
+                      firebaseErrorHandeling(e, context);
+                    } on Exception catch (e) {
+                      if (!context.mounted) return;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            'An error occurred. Please try again later.',
+                          ),
+                        ),
+                      );
+                      log('Error: $e');
+                    }
+                  },
+                  text: 'Sign Up',
+                ),
                 const SizedBox(height: 12),
                 RichTextWidget(
                   onTap: () {
@@ -71,5 +122,28 @@ class SignUpScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void firebaseErrorHandeling(FirebaseAuthException e, BuildContext context) {
+    if (e.code == 'weak-password') {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('The password provided is too weak.')),
+      );
+      log('The password provided is too weak.');
+    } else if (e.code == 'email-already-in-use') {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('The account already exists for that email.')),
+      );
+      log('The account already exists for that email.');
+    }
+  }
+
+  Future<void> registerNewUser(String email, String password) async {
+    var auth = FirebaseAuth.instance;
+    UserCredential user = await auth.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    log('User created: ${user.user?.email}');
   }
 }
