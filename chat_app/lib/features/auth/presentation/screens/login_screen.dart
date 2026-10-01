@@ -1,6 +1,6 @@
 import 'package:chat_app/core/consts/app_consts.dart';
 import 'package:chat_app/core/widgets/custom_button_widget.dart';
-import 'package:chat_app/core/widgets/custom_text_fieldWidget.dart';
+import 'package:chat_app/core/widgets/custom_text_field_widget.dart';
 import 'package:chat_app/features/auth/presentation/widgets/rich_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -13,6 +13,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  String email = '';
+  String password = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,11 +55,21 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 const SizedBox(height: 12),
-                CustomTextFieldWidget(hintText: 'Email'),
+                CustomTextFieldWidget(
+                  hintText: 'Email',
+                  onChanged: (value) {
+                    email = value;
+                  },
+                ),
                 const SizedBox(height: 12),
-                CustomTextFieldWidget(hintText: 'Password'),
+                CustomTextFieldWidget(
+                  hintText: 'Password',
+                  onChanged: (value) {
+                    password = value;
+                  },
+                ),
                 const SizedBox(height: 40),
-                CustomButtonWidget(onPressed: () {}, text: 'Login'),
+                CustomButtonWidget(text: 'Login', onPressed: () {}),
                 const SizedBox(height: 12),
                 RichTextWidget(
                   onTap: () {

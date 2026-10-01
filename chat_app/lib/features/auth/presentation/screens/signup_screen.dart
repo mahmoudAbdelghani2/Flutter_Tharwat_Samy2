@@ -1,6 +1,6 @@
 import 'package:chat_app/core/consts/app_consts.dart';
 import 'package:chat_app/core/widgets/custom_button_widget.dart';
-import 'package:chat_app/core/widgets/custom_text_fieldWidget.dart';
+import 'package:chat_app/core/widgets/custom_text_field_widget.dart';
 import 'package:chat_app/features/auth/presentation/widgets/rich_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
