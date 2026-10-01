@@ -1,4 +1,5 @@
 import 'package:chat_app/core/consts/app_consts.dart';
+import 'package:chat_app/core/consts/validators.dart';
 import 'package:chat_app/core/widgets/custom_button_widget.dart';
 import 'package:chat_app/core/widgets/custom_text_field_widget.dart';
 import 'package:chat_app/features/auth/presentation/widgets/rich_text_widget.dart';
@@ -13,8 +14,9 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  String email = '';
-  String password = '';
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,61 +26,68 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Center(
           child: SingleChildScrollView(
             physics: BouncingScrollPhysics(),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  'assets/images/scholar.png',
-                  width: 100,
-                  height: 100,
-                ),
-                // const SizedBox(height: 12),
-                Text(
-                  'Scholar Chat',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    fontFamily: 'pacifico',
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/images/scholar.png',
+                    width: 100,
+                    height: 100,
                   ),
-                ),
-                const SizedBox(height: 12),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Login',
+                  // const SizedBox(height: 12),
+                  Text(
+                    'Scholar Chat',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
+                      fontFamily: 'pacifico',
                     ),
                   ),
-                ),
-                const SizedBox(height: 12),
-                CustomTextFieldWidget(
-                  hintText: 'Email',
-                  onChanged: (value) {
-                    email = value;
-                  },
-                ),
-                const SizedBox(height: 12),
-                CustomTextFieldWidget(
-                  hintText: 'Password',
-                  onChanged: (value) {
-                    password = value;
-                  },
-                ),
-                const SizedBox(height: 40),
-                CustomButtonWidget(text: 'Login', onPressed: () {}),
-                const SizedBox(height: 12),
-                RichTextWidget(
-                  onTap: () {
-                    GoRouter.of(context).pushReplacement(AppConsts.signupPath);
-                  },
-                  mainText: 'Don\'t have an account?',
-                  linkText: 'Register',
-                ),
-              ],
+                  const SizedBox(height: 12),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Login',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  CustomTextFieldWidget(
+                    validator: (value) => Validators.validateEmail(value),
+                    hintText: 'Email',
+                    onChanged: (value) {
+                      _emailController.text = value;
+                    },
+                  ),
+                  const SizedBox(height: 12),
+                  CustomTextFieldWidget(
+                    validator: (value) => Validators.validatePassword(value),
+                    hintText: 'Password',
+                    onChanged: (value) {
+                      _passwordController.text = value;
+                    },
+                  ),
+                  const SizedBox(height: 40),
+                  CustomButtonWidget(text: 'Login', onPressed: () {}),
+                  const SizedBox(height: 12),
+                  RichTextWidget(
+                    onTap: () {
+                      GoRouter.of(
+                        context,
+                      ).pushReplacement(AppConsts.signupPath);
+                    },
+                    mainText: 'Don\'t have an account?',
+                    linkText: 'Register',
+                  ),
+                ],
+              ),
             ),
           ),
         ),
