@@ -1,8 +1,12 @@
+import 'dart:developer';
+
 import 'package:chat_app/core/consts/app_consts.dart';
 import 'package:chat_app/core/consts/validators.dart';
+import 'package:chat_app/core/services/firebase/firebase_error_handeling.dart';
 import 'package:chat_app/core/widgets/custom_button_widget.dart';
 import 'package:chat_app/core/widgets/custom_text_field_widget.dart';
 import 'package:chat_app/features/auth/presentation/widgets/rich_text_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -75,7 +79,49 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                   ),
                   const SizedBox(height: 40),
-                  CustomButtonWidget(text: 'Login', onPressed: () {}),
+                  CustomButtonWidget(
+                    text: 'Login',
+                    onPressed: () async {
+                      if (!_formKey.currentState!.validate()) {
+                        try {
+                          await userLogin();
+
+                          if (!context.mounted) return;
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Login successful! Welcome back'),
+                            ),
+                          );
+                          //ToDo: Navigate to the next screen after successful login
+                        } on FirebaseAuthException catch (e) {
+                          if (!context.mounted) return;
+                          FirebaseErrorHandeling.firebaseErrorHandeling(
+                            e,
+                            context,
+                          );
+                        } on Exception catch (e) {
+                          if (!context.mounted) return;
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                'An error occurred. Please try again later.',
+                              ),
+                            ),
+                          );
+                          log('Error: $e');
+                        }
+                      } else {
+                        if (!context.mounted) return;
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'Please fill in all required fields and ensure they are valid.',
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                  ),
                   const SizedBox(height: 12),
                   RichTextWidget(
                     onTap: () {
@@ -93,5 +139,14 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> userLogin() async {
+    var auth = FirebaseAuth.instance;
+    var userCredential = await auth.signInWithEmailAndPassword(
+      email: _emailController.text.trim(),
+      password: _passwordController.text.trim(),
+    );
+    log('User logged in: ${userCredential.user?.email}');
   }
 }

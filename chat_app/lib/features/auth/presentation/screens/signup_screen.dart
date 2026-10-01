@@ -4,6 +4,7 @@ import 'dart:developer';
 
 import 'package:chat_app/core/consts/app_consts.dart';
 import 'package:chat_app/core/consts/validators.dart';
+import 'package:chat_app/core/services/firebase/firebase_error_handeling.dart';
 import 'package:chat_app/core/widgets/custom_button_widget.dart';
 import 'package:chat_app/core/widgets/custom_text_field_widget.dart';
 import 'package:chat_app/features/auth/presentation/widgets/rich_text_widget.dart';
@@ -105,7 +106,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           // ToDo: Navigate to the next screen
                         } on FirebaseAuthException catch (e) {
                           if (!context.mounted) return;
-                          firebaseErrorHandeling(e, context);
+                          FirebaseErrorHandeling.firebaseErrorHandeling(
+                            e,
+                            context,
+                          );
                         } on Exception catch (e) {
                           if (!context.mounted) return;
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -145,20 +149,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
       ),
     );
-  }
-
-  void firebaseErrorHandeling(FirebaseAuthException e, BuildContext context) {
-    if (e.code == 'weak-password') {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('The password provided is too weak.')),
-      );
-      log('The password provided is too weak.');
-    } else if (e.code == 'email-already-in-use') {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('The account already exists for that email.')),
-      );
-      log('The account already exists for that email.');
-    }
   }
 
   Future<void> registerNewUser(String email, String password) async {
