@@ -87,10 +87,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           await userLogin();
 
                           if (!context.mounted) return;
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('Login successful! Welcome back'),
-                            ),
+                          AppConsts.showSnackBar(
+                            snackText: 'Login successful!',
+                            context: context,
                           );
                           //ToDo: Navigate to the next screen after successful login
                         } on FirebaseAuthException catch (e) {
@@ -101,23 +100,18 @@ class _LoginScreenState extends State<LoginScreen> {
                           );
                         } on Exception catch (e) {
                           if (!context.mounted) return;
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                'An error occurred. Please try again later.',
-                              ),
-                            ),
+                          AppConsts.showSnackBar(
+                            snackText: 'An error occurred. Please try again.',
+                            context: context,
                           );
                           log('Error: $e');
                         }
                       } else {
                         if (!context.mounted) return;
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
+                        AppConsts.showSnackBar(
+                          snackText:
                               'Please fill in all required fields and ensure they are valid.',
-                            ),
-                          ),
+                          context: context,
                         );
                       }
                     },

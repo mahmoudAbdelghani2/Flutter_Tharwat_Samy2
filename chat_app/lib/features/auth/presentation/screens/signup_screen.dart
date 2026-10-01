@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'package:chat_app/core/consts/app_consts.dart';
 import 'package:chat_app/core/consts/validators.dart';
 import 'package:chat_app/core/services/firebase/firebase_error_handeling.dart';
+import 'package:chat_app/core/services/firebase/firebase_services.dart';
 import 'package:chat_app/core/widgets/custom_button_widget.dart';
 import 'package:chat_app/core/widgets/custom_text_field_widget.dart';
 import 'package:chat_app/features/auth/presentation/widgets/rich_text_widget.dart';
@@ -91,17 +92,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     onPressed: () async {
                       if (!_formKey.currentState!.validate()) {
                         try {
-                          await registerNewUser(
-                            _emailController.text,
-                            _passwordController.text,
-                          );
+                          var userCredential =
+                              await FirebaseServices.createUserWithEmailAndPassword(
+                                _emailController.text.trim(),
+                                _passwordController.text.trim(),
+                              );
+                          log('User signed up: ${userCredential.user?.email}');
                           if (!context.mounted) return;
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                'Your account has been created successfully!',
-                              ),
-                            ),
+                          AppConsts.showSnackBar(
+                            snackText: 'Sign up successful!',
+                            context: context,
                           );
                           // ToDo: Navigate to the next screen
                         } on FirebaseAuthException catch (e) {
@@ -112,23 +112,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           );
                         } on Exception catch (e) {
                           if (!context.mounted) return;
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                'An error occurred. Please try again later.',
-                              ),
-                            ),
+                          AppConsts.showSnackBar(
+                            snackText: 'An error occurred. Please try again.',
+                            context: context,
                           );
                           log('Error: $e');
                         }
                       } else {
                         if (!context.mounted) return;
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
+                        AppConsts.showSnackBar(
+                          snackText:
                               'Please fill in all required fields and ensure they are valid.',
-                            ),
-                          ),
+                          context: context,
                         );
                       }
                     },
@@ -149,14 +144,5 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
       ),
     );
-  }
-
-  Future<void> registerNewUser(String email, String password) async {
-    var auth = FirebaseAuth.instance;
-    UserCredential user = await auth.createUserWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
-    log('User created: ${user.user?.email}');
   }
 }
