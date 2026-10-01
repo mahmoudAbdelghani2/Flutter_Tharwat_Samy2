@@ -14,6 +14,7 @@ class CustomTextFieldWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      style: TextStyle(color: Colors.white),
       validator: validator,
       onChanged: onChanged,
       decoration: InputDecoration(
