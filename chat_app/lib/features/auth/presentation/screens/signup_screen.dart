@@ -3,6 +3,7 @@
 import 'dart:developer';
 
 import 'package:chat_app/core/consts/app_consts.dart';
+import 'package:chat_app/core/consts/custom_snak_bar.dart';
 import 'package:chat_app/core/consts/validators.dart';
 import 'package:chat_app/core/services/firebase/firebase_error_handeling.dart';
 import 'package:chat_app/core/services/firebase/firebase_services.dart';
@@ -109,9 +110,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               'User signed up: ${userCredential.user?.email}',
                             );
                             if (!context.mounted) return;
-                            AppConsts.showSnackBar(
-                              snackText: 'Sign up successful!',
+                            CustomSnackBar.show(
                               context: context,
+                              message: 'Sign up successful!',
+                              type: SnackBarType.success,
                             );
                             // ToDo: Navigate to the next screen
                           } on FirebaseAuthException catch (e) {
@@ -122,9 +124,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             );
                           } on Exception catch (e) {
                             if (!context.mounted) return;
-                            AppConsts.showSnackBar(
-                              snackText: 'An error occurred. Please try again.',
+                            CustomSnackBar.show(
                               context: context,
+                              message: 'An error occurred. Please try again.',
+                              type: SnackBarType.error,
                             );
                             log('Error: $e');
                           }
@@ -132,10 +135,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           setState(() {});
                         } else {
                           if (!context.mounted) return;
-                          AppConsts.showSnackBar(
-                            snackText:
-                                'Please fill in all required fields and ensure they are valid.',
+                          CustomSnackBar.show(
                             context: context,
+                            message:
+                                'Please fill in all required fields and ensure they are valid.',
+                            type: SnackBarType.warning,
                           );
                         }
                       },
