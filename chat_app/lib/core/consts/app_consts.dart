@@ -7,4 +7,5 @@ class AppConsts {
   static const String loginPath = '/';
   static const String signupPath = '/signup';
   static const String chatPath = '/chat-screen';
+  static const String scholarImagePath = 'assets/images/scholar.png';
 }

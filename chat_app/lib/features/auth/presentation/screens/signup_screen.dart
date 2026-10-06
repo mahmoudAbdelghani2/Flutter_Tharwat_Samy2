@@ -47,7 +47,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset(
-                      'assets/images/scholar.png',
+                      AppConsts.scholarImagePath,
                       width: 100,
                       height: 100,
                     ),
