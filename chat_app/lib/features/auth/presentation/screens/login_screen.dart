@@ -109,7 +109,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               message: 'Login successful!',
                               type: SnackBarType.success,
                             );
-                            //ToDo: Navigate to the next screen after successful login
+                            GoRouter.of(
+                              context,
+                            ).pushReplacement(AppConsts.chatPath);
                           } on FirebaseAuthException catch (e) {
                             if (!context.mounted) return;
                             FirebaseErrorHandeling.firebaseErrorHandeling(

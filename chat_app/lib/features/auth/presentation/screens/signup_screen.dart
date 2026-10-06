@@ -115,7 +115,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               message: 'Sign up successful!',
                               type: SnackBarType.success,
                             );
-                            // ToDo: Navigate to the next screen
+                            GoRouter.of(
+                              context,
+                            ).pushReplacement(AppConsts.chatPath);
                           } on FirebaseAuthException catch (e) {
                             if (!context.mounted) return;
                             FirebaseErrorHandeling.firebaseErrorHandeling(
