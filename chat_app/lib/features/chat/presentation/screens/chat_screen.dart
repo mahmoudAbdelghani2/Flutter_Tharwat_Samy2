@@ -1,5 +1,6 @@
 import 'package:chat_app/core/consts/app_consts.dart';
 import 'package:chat_bubbles/bubbles/bubble_special_three.dart';
+import 'package:chat_bubbles/message_bars/message_bar.dart';
 import 'package:flutter/material.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -68,6 +69,20 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
               );
             },
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: MessageBar(
+              onSend: (text) => _sendMessage(text),
+              actions: [
+                InkWell(
+                  child: const Icon(Icons.add, color: Colors.black54, size: 24),
+                  onTap: () {
+                    // Handle attachment action
+                  },
+                ),
+              ],
+            ),
           ),
         ],
       ),
